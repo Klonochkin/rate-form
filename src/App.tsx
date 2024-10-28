@@ -163,6 +163,12 @@ function Review({
             onSubmit={(event) => {
                 event.preventDefault();
                 changeStatus(2, true);
+                toast('Форма успешно заполнена', {
+                    action: {
+                        label: 'Скрыть',
+                        onClick: () => console.log('скрыт'),
+                    },
+                });
             }}>
             <Label className='text-2xl'>
                 Напишите отзыв
@@ -244,12 +250,6 @@ function App() {
             setFormStatus([]);
             return;
         }
-        toast('Форма успешно заполнена', {
-            action: {
-                label: 'Скрыть',
-                onClick: () => console.log('скрыт'),
-            },
-        });
         const newFormStatus = formStatus.slice();
         newFormStatus[id] = flag;
         setFormStatus(newFormStatus);
