@@ -51,8 +51,8 @@ function SelectRate({
                     </SelectContent>
                 </Select>
             </Label>
-            <Button className='w-[6.5rem] mt-4' type='submit'>
-                Отправить
+            <Button className='mt-4 self-start' type='submit'>
+                Далее
             </Button>
         </form>
     );
@@ -146,8 +146,8 @@ function Form({
                     </SelectContent>
                 </Select>
             </Label>
-            <Button className='w-[6.5rem]' type='submit'>
-                Отправить
+            <Button className='self-start' type='submit'>
+                Далее
             </Button>
         </form>
     );
@@ -168,7 +168,7 @@ function Review({
                 Напишите отзыв
                 <Textarea className='mt-4' required />
             </Label>
-            <Button className='w-[6.5rem] mt-4' type='submit'>
+            <Button className='mt-4 self-start' type='submit'>
                 Отправить
             </Button>
         </form>
