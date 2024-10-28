@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/modules/DatePicker.tsx';
+import { ChevronRight } from 'lucide-react';
 
 export function Form({ changeStatus }: { changeStatus: (id: number) => void }) {
     return (
@@ -100,6 +101,7 @@ export function Form({ changeStatus }: { changeStatus: (id: number) => void }) {
             </form>
             <Button form='form' className='self-start mt-4' type='submit'>
                 Далее
+                <ChevronRight />
             </Button>
         </div>
     );
