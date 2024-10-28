@@ -23,16 +23,12 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 
-function SelectRate({
-    changeStatus,
-}: {
-    changeStatus: (id: number, flag: boolean) => void;
-}) {
+function SelectRate({ changeStatus }: { changeStatus: (id: number) => void }) {
     return (
         <form
             onSubmit={(event) => {
                 event.preventDefault();
-                changeStatus(1, true);
+                changeStatus(2);
             }}>
             <Label className='text-2xl'>
                 Выберите оценку
@@ -51,24 +47,28 @@ function SelectRate({
                     </SelectContent>
                 </Select>
             </Label>
-            <Button className='mt-4 self-start' type='submit'>
-                Далее
-            </Button>
+            <span className='self-start'>
+                <Button type='submit'>Далее</Button>
+                <Button
+                    onClick={() => {
+                        changeStatus(0);
+                    }}
+                    type='button'
+                    className='m-4'>
+                    Назад
+                </Button>
+            </span>
         </form>
     );
 }
 
-function Form({
-    changeStatus,
-}: {
-    changeStatus: (id: number, flag: boolean) => void;
-}) {
+function Form({ changeStatus }: { changeStatus: (id: number) => void }) {
     return (
         <form
             className='border p-3.5 flex flex-col gap-5'
             onSubmit={(event) => {
                 event.preventDefault();
-                changeStatus(0, true);
+                changeStatus(1);
             }}
             autoComplete='on'>
             <fieldset className='text-gray-200 font-bold my-1.5 text-2xl '>
@@ -153,17 +153,13 @@ function Form({
     );
 }
 
-function Review({
-    changeStatus,
-}: {
-    changeStatus: (id: number, flag: boolean) => void;
-}) {
+function Review({ changeStatus }: { changeStatus: (id: number) => void }) {
     return (
         <form
             onSubmit={(event) => {
                 event.preventDefault();
-                changeStatus(2, true);
-                toast('Форма успешно заполнена', {
+                changeStatus(3);
+                toast('Отзыв отправлен', {
                     action: {
                         label: 'Скрыть',
                         onClick: () => console.log('скрыт'),
@@ -174,9 +170,17 @@ function Review({
                 Напишите отзыв
                 <Textarea className='mt-4' required />
             </Label>
-            <Button className='mt-4 self-start' type='submit'>
-                Отправить
-            </Button>
+            <span className='self-start'>
+                <Button type='submit'>Отправить</Button>
+                <Button
+                    onClick={() => {
+                        changeStatus(1);
+                    }}
+                    type='button'
+                    className='m-4'>
+                    Назад
+                </Button>
+            </span>
         </form>
     );
 }
@@ -219,54 +223,52 @@ function Control({
     status,
     changeStatus,
 }: {
-    status: boolean[];
-    changeStatus: (id: number, flag: boolean) => void;
+    status: number;
+    changeStatus: (id: number) => void;
 }) {
-    if (!status[0]) {
-        return <Form changeStatus={changeStatus} />;
-    } else if (!status[1]) {
-        return <SelectRate changeStatus={changeStatus} />;
-    } else if (!status[2]) {
-        return <Review changeStatus={changeStatus} />;
+    if (status === 5) {
+        changeStatus(0);
+        return <></>;
     }
     return (
-        <main className='flex flex-col'>
-            <Button
-                className='w-[10rem] mt-4'
-                onClick={() => {
-                    changeStatus(0, false);
-                }}>
-                Вернуться на главную
-            </Button>
-        </main>
+        <div>
+            <div className={status == 0 ? '' : 'sr-only'}>
+                <Form changeStatus={changeStatus} />
+            </div>
+            <div className={status == 1 ? '' : 'sr-only'}>
+                <SelectRate changeStatus={changeStatus} />
+            </div>
+            <div className={status == 2 ? '' : 'sr-only'}>
+                <Review changeStatus={changeStatus} />
+            </div>
+            <div className={status == 3 ? 'flex flex-col' : 'sr-only'}>
+                <Button
+                    className='w-[10rem] mt-4'
+                    onClick={() => {
+                        changeStatus(5);
+                    }}>
+                    Вернуться на главную
+                </Button>
+            </div>
+        </div>
     );
 }
 
 function App() {
-    const [formStatus, setFormStatus] = useState<boolean[]>([]);
+    const [currentPage, setCurrentPage] = useState(0);
 
-    function changeFormStatus(id: number, flag: boolean) {
-        if (flag === false && id === 0) {
-            setFormStatus([]);
-            return;
-        }
-        const newFormStatus = formStatus.slice();
-        newFormStatus[id] = flag;
-        setFormStatus(newFormStatus);
+    function changeFormStatus(id: number) {
+        setCurrentPage(id);
     }
 
     return (
         <main className='max-w-[750px] m-auto'>
-            {formStatus[2] === true ? (
-                <h1 className='text-gray-100 font-bold text-4xl my-5'>
-                    Спасибо за отзыв
-                </h1>
-            ) : (
-                <h1 className='text-gray-100 font-bold text-4xl my-5'>
-                    Оцените работу нашего сервиса
-                </h1>
-            )}
-            <Control status={formStatus} changeStatus={changeFormStatus} />
+            <h1 className='text-gray-100 font-bold text-4xl my-5'>
+                {currentPage !== 3
+                    ? 'Оцените работу нашего сервиса'
+                    : 'Спасибо за отзыв'}
+            </h1>
+            <Control status={currentPage} changeStatus={changeFormStatus} />
             <Toaster />
         </main>
     );
