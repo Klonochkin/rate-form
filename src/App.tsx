@@ -69,7 +69,8 @@ function Form({
             onSubmit={(event) => {
                 event.preventDefault();
                 changeStatus(0, true);
-            }}>
+            }}
+            autoComplete='on'>
             <fieldset className='text-gray-200 font-bold my-1.5 text-2xl '>
                 Заполните форму
             </fieldset>
@@ -80,6 +81,7 @@ function Form({
                     required
                     type='text'
                     placeholder='Иван'
+                    autoComplete='name'
                 />
             </Label>
             <Label>
@@ -89,6 +91,7 @@ function Form({
                     required
                     type='text'
                     placeholder='Иванович'
+                    autoComplete='given-name'
                 />
             </Label>
             <Label>
@@ -98,6 +101,7 @@ function Form({
                     required
                     type='text'
                     placeholder='Иванов'
+                    autoComplete='family-name'
                 />
             </Label>
             <Label>
@@ -111,6 +115,7 @@ function Form({
                     required
                     type='email'
                     placeholder='example@gmail.com'
+                    autoComplete='email'
                 />
             </Label>
             <Label>
@@ -120,6 +125,7 @@ function Form({
                     required
                     type='tel'
                     placeholder='+7 (999) 999-99-99'
+                    autoComplete='tel'
                 />
             </Label>
             <Label>
