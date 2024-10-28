@@ -1,5 +1,6 @@
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -27,7 +28,11 @@ export function DatePicker() {
                         !date && 'text-muted-foreground',
                     )}>
                     <CalendarIcon />
-                    {date ? format(date, 'PPP') : <span>Выберите дату</span>}
+                    {date ? (
+                        format(date, 'PPP', { locale: ru })
+                    ) : (
+                        <span>Выберите дату</span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className='w-auto p-0'>
@@ -38,6 +43,7 @@ export function DatePicker() {
                     initialFocus
                     fromDate={maxDate}
                     toDate={minDate}
+                    locale={ru}
                 />
             </PopoverContent>
         </Popover>
