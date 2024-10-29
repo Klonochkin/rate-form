@@ -11,16 +11,26 @@ import {
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/modules/DatePicker.tsx';
 import { ChevronRight } from 'lucide-react';
+import { CurrentPageContext } from '../App.tsx';
+import { useContext } from 'react';
 
-export function Form({ changeStatus }: { changeStatus: (id: number) => void }) {
+export function Form() {
+    const context = useContext(CurrentPageContext);
+
+    if (!context) {
+        return;
+    }
+
+    const { currentPage, setCurrentPage } = context;
+
     return (
-        <div>
+        <div className={currentPage == 0 ? '' : 'sr-only'}>
             <form
                 id='form'
                 className='border p-3.5 flex flex-col gap-5 rounded-md'
                 onSubmit={(event) => {
                     event.preventDefault();
-                    changeStatus(1);
+                    setCurrentPage(1);
                 }}
                 autoComplete='on'>
                 <fieldset className='text-gray-200 font-bold my-1.5 text-2xl'>

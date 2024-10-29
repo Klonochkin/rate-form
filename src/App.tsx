@@ -3,62 +3,67 @@ import { Form } from './modules/Form.tsx';
 import { SelectRate } from './modules/SelectRate.tsx';
 import { Review } from './modules/Review.tsx';
 import { Toaster } from 'sonner';
-import { useState } from 'react';
+import { useState, createContext, useContext } from 'react';
 
-function Control({
-    status,
-    changeStatus,
-}: {
-    status: number;
-    changeStatus: (id: number) => void;
-}) {
-    if (status === 5) {
-        changeStatus(0);
-        return <></>;
+interface ContextType {
+    currentPage: number;
+    setCurrentPage: (id: number) => void;
+}
+
+export const CurrentPageContext = createContext<ContextType | undefined>(
+    undefined,
+);
+
+function Control({}: {}) {
+    const context = useContext(CurrentPageContext);
+    if (!context) {
+        return;
     }
+
+    const { currentPage, setCurrentPage } = context;
+
+    let form: HTMLFormElement | null = null;
+    if (document.getElementById('form')) {
+        form = document.getElementById('form') as HTMLFormElement;
+    }
+
     return (
         <div>
-            <div className={status == 0 ? '' : 'sr-only'}>
-                <Form changeStatus={changeStatus} />
-            </div>
-            <div className={status == 1 ? '' : 'sr-only'}>
-                <SelectRate changeStatus={changeStatus} />
-            </div>
-            <div className={status == 2 ? '' : 'sr-only'}>
-                <Review changeStatus={changeStatus} />
-            </div>
-            <div className={status == 3 ? 'flex flex-col' : 'sr-only'}>
-                <Button
-                    className='self-start mt-4'
-                    onClick={() => {
-                        changeStatus(5);
-                    }}>
-                    Вернуться на главную
-                </Button>
-            </div>
+            <Form />
+            <SelectRate />
+            <Review />
+            <Button
+                className={
+                    currentPage == 3
+                        ? 'flex flex-col self-start mt-4'
+                        : 'sr-only'
+                }
+                onClick={() => {
+                    if (form) {
+                        form.reset();
+                    }
+                    setCurrentPage(0);
+                }}>
+                Вернуться на главную
+            </Button>
         </div>
     );
 }
 
-function App() {
+export default function App() {
     const [currentPage, setCurrentPage] = useState(0);
 
-    function changeFormStatus(id: number) {
-        console.log(id);
-        setCurrentPage(id);
-    }
-
     return (
-        <main className='max-w-[750px] m-auto'>
-            <h1 className='text-gray-100 font-bold text-4xl my-5'>
-                {currentPage !== 3
-                    ? 'Оцените работу нашего сервиса'
-                    : 'Спасибо за отзыв'}
-            </h1>
-            <Control status={currentPage} changeStatus={changeFormStatus} />
-            <Toaster />
-        </main>
+        <CurrentPageContext.Provider value={{ currentPage, setCurrentPage }}>
+            <main className='max-w-[750px] m-auto'>
+                <h1 className='text-gray-100 font-bold text-4xl my-5'>
+                    {currentPage !== 3
+                        ? 'Оцените работу нашего сервиса'
+                        : 'Спасибо за отзыв'}
+                </h1>
+                <Control />
+                <Toaster />
+            </main>
+        </CurrentPageContext.Provider>
     );
 }
-
-export default App;

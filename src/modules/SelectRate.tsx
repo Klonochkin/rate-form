@@ -9,17 +9,22 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { CurrentPageContext } from '../App.tsx';
+import { useContext } from 'react';
 
-export function SelectRate({
-    changeStatus,
-}: {
-    changeStatus: (id: number) => void;
-}) {
+export function SelectRate() {
+    const context = useContext(CurrentPageContext);
+
+    if (!context) {
+        return;
+    }
+
+    const { currentPage, setCurrentPage } = context;
     return (
-        <div>
+        <div className={currentPage == 1 ? '' : 'sr-only'}>
             <Button
                 onClick={() => {
-                    changeStatus(0);
+                    setCurrentPage(0);
                 }}
                 variant='ghost'
                 type='button'
@@ -30,7 +35,7 @@ export function SelectRate({
             <form
                 onSubmit={(event) => {
                     event.preventDefault();
-                    changeStatus(2);
+                    setCurrentPage(2);
                 }}>
                 <Label className='text-2xl'>
                     Выберите оценку

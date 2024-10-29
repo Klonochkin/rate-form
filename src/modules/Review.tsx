@@ -3,17 +3,23 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
+import { CurrentPageContext } from '../App.tsx';
+import { useContext } from 'react';
 
-export function Review({
-    changeStatus,
-}: {
-    changeStatus: (id: number) => void;
-}) {
+export function Review() {
+    const context = useContext(CurrentPageContext);
+
+    if (!context) {
+        return;
+    }
+
+    const { currentPage, setCurrentPage } = context;
+
     return (
-        <div>
+        <div className={currentPage == 2 ? '' : 'sr-only'}>
             <Button
                 onClick={() => {
-                    changeStatus(1);
+                    setCurrentPage(1);
                 }}
                 variant='ghost'
                 type='button'
@@ -24,7 +30,7 @@ export function Review({
             <form
                 onSubmit={(event) => {
                     event.preventDefault();
-                    changeStatus(3);
+                    setCurrentPage(3);
                     toast('Отзыв отправлен', {
                         action: {
                             label: 'Скрыть',
