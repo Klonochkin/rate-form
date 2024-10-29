@@ -10,15 +10,16 @@ interface ContextType {
     setCurrentPage: (id: number) => void;
 }
 
-export const CurrentPageContext = createContext<ContextType | undefined>(
-    undefined,
-);
+const initialContextValue: ContextType = {
+    currentPage: 0,
+    setCurrentPage: () => {},
+};
 
-function Control({}: {}) {
+export const CurrentPageContext =
+    createContext<ContextType>(initialContextValue);
+
+function Control() {
     const context = useContext(CurrentPageContext);
-    if (!context) {
-        return;
-    }
 
     const { currentPage, setCurrentPage } = context;
 
@@ -29,9 +30,9 @@ function Control({}: {}) {
 
     return (
         <div>
-            <Form />
-            <SelectRate />
-            <Review />
+            <Form className={currentPage !== 0 ? 'sr-only' : ''} />
+            <SelectRate className={currentPage !== 1 ? 'sr-only' : ''} />
+            <Review className={currentPage !== 2 ? 'sr-only' : ''} />
             <Button
                 className={
                     currentPage == 3

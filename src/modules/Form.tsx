@@ -14,17 +14,13 @@ import { ChevronRight } from 'lucide-react';
 import { CurrentPageContext } from '../App.tsx';
 import { useContext } from 'react';
 
-export function Form() {
+export function Form({ className }: { className: string }) {
     const context = useContext(CurrentPageContext);
 
-    if (!context) {
-        return;
-    }
-
-    const { currentPage, setCurrentPage } = context;
+    const { setCurrentPage } = context;
 
     return (
-        <div className={currentPage == 0 ? '' : 'sr-only'}>
+        <div className={className}>
             <form
                 id='form'
                 className='border p-3.5 flex flex-col gap-5 rounded-md'

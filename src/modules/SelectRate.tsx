@@ -12,16 +12,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CurrentPageContext } from '../App.tsx';
 import { useContext } from 'react';
 
-export function SelectRate() {
+export function SelectRate({ className }: { className: string }) {
     const context = useContext(CurrentPageContext);
 
-    if (!context) {
-        return;
-    }
-
-    const { currentPage, setCurrentPage } = context;
+    const { setCurrentPage } = context;
     return (
-        <div className={currentPage == 1 ? '' : 'sr-only'}>
+        <div className={className}>
             <Button
                 onClick={() => {
                     setCurrentPage(0);

@@ -6,17 +6,13 @@ import { ChevronLeft } from 'lucide-react';
 import { CurrentPageContext } from '../App.tsx';
 import { useContext } from 'react';
 
-export function Review() {
+export function Review({ className }: { className: string }) {
     const context = useContext(CurrentPageContext);
 
-    if (!context) {
-        return;
-    }
-
-    const { currentPage, setCurrentPage } = context;
+    const { setCurrentPage } = context;
 
     return (
-        <div className={currentPage == 2 ? '' : 'sr-only'}>
+        <div className={className}>
             <Button
                 onClick={() => {
                     setCurrentPage(1);
