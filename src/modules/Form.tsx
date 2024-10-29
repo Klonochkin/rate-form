@@ -33,7 +33,7 @@ export function Form({ changeStatus }: { changeStatus: (id: number) => void }) {
                         required
                         type='text'
                         placeholder='Иван'
-                        autoComplete='name'
+                        autoComplete='first-name'
                     />
                 </Label>
                 <Label>
@@ -43,7 +43,7 @@ export function Form({ changeStatus }: { changeStatus: (id: number) => void }) {
                         required
                         type='text'
                         placeholder='Иванович'
-                        autoComplete='given-name'
+                        autoComplete='additional-name'
                     />
                 </Label>
                 <Label>

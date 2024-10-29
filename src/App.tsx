@@ -5,7 +5,6 @@ import { Review } from './modules/Review.tsx';
 import { Toaster } from 'sonner';
 import { useState } from 'react';
 
-
 function Control({
     status,
     changeStatus,
@@ -45,6 +44,7 @@ function App() {
     const [currentPage, setCurrentPage] = useState(0);
 
     function changeFormStatus(id: number) {
+        console.log(id);
         setCurrentPage(id);
     }
 
