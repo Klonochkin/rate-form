@@ -29,7 +29,7 @@ function Control({
             </div>
             <div className={status == 3 ? 'flex flex-col' : 'sr-only'}>
                 <Button
-                    className='w-[10rem] mt-4'
+                    className='self-start mt-4'
                     onClick={() => {
                         changeStatus(5);
                     }}>

@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 export function Review({
     changeStatus,
@@ -38,7 +38,6 @@ export function Review({
                 </Label>
                 <Button type='submit' className='mt-4'>
                     Отправить
-                    <ChevronRight />
                 </Button>
             </form>
         </div>
