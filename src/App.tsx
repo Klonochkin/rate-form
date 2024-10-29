@@ -1,5 +1,5 @@
 import { Button } from './components/ui/button';
-import { Form } from './modules/Form.tsx';
+import { InputForm } from './modules/NewForm.tsx';
 import { SelectRate } from './modules/SelectRate.tsx';
 import { Review } from './modules/Review.tsx';
 import { Toaster } from 'sonner';
@@ -19,7 +19,7 @@ function Control({
     return (
         <div>
             <div className={status == 0 ? '' : 'sr-only'}>
-                <Form changeStatus={changeStatus} />
+                <InputForm changeStatus={changeStatus} />
             </div>
             <div className={status == 1 ? '' : 'sr-only'}>
                 <SelectRate changeStatus={changeStatus} />
