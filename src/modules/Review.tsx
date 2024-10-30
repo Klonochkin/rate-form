@@ -1,13 +1,13 @@
-import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-
 export function Review({
     changeStatus,
+    status,
 }: {
     changeStatus: (id: number) => void;
+    status: number;
 }) {
     return (
         <div>
@@ -21,26 +21,18 @@ export function Review({
                 <ChevronLeft />
                 Назад
             </Button>
-            <form
-                onSubmit={(event) => {
-                    event.preventDefault();
-                    changeStatus(3);
-                    toast('Отзыв отправлен', {
-                        action: {
-                            label: 'Скрыть',
-                            onClick: () => console.log('скрыт'),
-                        },
-                    });
-                }}>
-                <Label className='text-2xl'>
-                    Напишите отзыв
-                    <Textarea className='mt-4' required />
-                </Label>
-                <Button type='submit' className='mt-4'>
-                    Отправить
-                    <ChevronRight />
-                </Button>
-            </form>
+            <Label className='text-2xl block'>
+                Напишите отзыв
+                <Textarea
+                    className='mt-4'
+                    form='form'
+                    required={status === 2 ? true : false}
+                />
+            </Label>
+            <Button form='form' type='submit' className='mt-4'>
+                Отправить
+                <ChevronRight />
+            </Button>
         </div>
     );
 }

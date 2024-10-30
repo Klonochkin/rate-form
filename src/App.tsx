@@ -1,5 +1,5 @@
 import { Button } from './components/ui/button';
-import { InputForm } from './modules/NewForm.tsx';
+import { RateForm } from './modules/form.tsx';
 import { SelectRate } from './modules/SelectRate.tsx';
 import { Review } from './modules/Review.tsx';
 import { Toaster } from 'sonner';
@@ -12,26 +12,22 @@ function Control({
     status: number;
     changeStatus: (id: number) => void;
 }) {
-    if (status === 5) {
-        changeStatus(0);
-        return <></>;
-    }
     return (
         <div>
             <div className={status == 0 ? '' : 'sr-only'}>
-                <InputForm changeStatus={changeStatus} />
+                <RateForm changeStatus={changeStatus} status={status} />
             </div>
             <div className={status == 1 ? '' : 'sr-only'}>
-                <SelectRate changeStatus={changeStatus} />
+                <SelectRate changeStatus={changeStatus} status={status} />
             </div>
             <div className={status == 2 ? '' : 'sr-only'}>
-                <Review changeStatus={changeStatus} />
+                <Review changeStatus={changeStatus} status={status} />
             </div>
             <div className={status == 3 ? 'flex flex-col' : 'sr-only'}>
                 <Button
                     className='w-[10rem] mt-4'
                     onClick={() => {
-                        changeStatus(5);
+                        changeStatus(0);
                     }}>
                     Вернуться на главную
                 </Button>
@@ -44,7 +40,6 @@ function App() {
     const [currentPage, setCurrentPage] = useState(0);
 
     function changeFormStatus(id: number) {
-        console.log(id);
         setCurrentPage(id);
     }
 

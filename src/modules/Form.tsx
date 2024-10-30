@@ -1,9 +1,9 @@
 'use client';
-
+import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import { DatePicker } from './DatePicker.tsx';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -22,6 +22,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 const FormSchema = z.object({
     first_name: z.string(),
     father_name: z.string(),
@@ -36,23 +38,28 @@ const FormSchema = z.object({
     bday: z.string(),
 });
 
-import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
-import { useEffect, useRef, useState } from 'react';
-
-export function InputForm({
+export function RateForm({
     changeStatus,
+    status,
 }: {
     changeStatus: (id: number) => void;
+    status: number;
 }) {
+    const [isResetForm, setResetForm] = useState(true);
+    function onSubmit() {
+        changeStatus(++status);
+        if (status === 3) {
+            setResetForm(!isResetForm);
+            form.reset();
+            toast('Отзыв отправлен', {
+                action: {
+                    label: 'Скрыть',
+                    onClick: () => console.log('скрыт'),
+                },
+            });
+        }
+    }
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -62,42 +69,16 @@ export function InputForm({
             email: '',
             tel: '',
             bday: '',
+            education: '',
         },
     });
-    const [date, setDate] = useState<Date>();
-
-    const myRef = useRef<HTMLInputElement>(null);
-
-    const today = new Date();
-    const minDate = new Date(today);
-    minDate.setFullYear(today.getFullYear() - 16);
-    const maxDate = new Date(today);
-    maxDate.setFullYear(today.getFullYear() - 100);
-
-    function onSubmit() {
-        changeStatus(1);
-    }
-
-    useEffect(() => {
-        const str: string =
-            String(date?.getFullYear()).padStart(2, '0') +
-            '-' +
-            String(date?.getMonth()).padStart(2, '0') +
-            '-' +
-            String(date?.getDate()).padStart(2, '0');
-        if (
-            myRef.current?.value !== str &&
-            str !== 'undefined-undefined-undefined'
-        ) {
-            if (myRef?.current) {
-                myRef.current.value = str;
-            }
-        }
-    }, [myRef.current?.value, date]);
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className='space-y-6'
+                id='form'>
                 <FormField
                     control={form.control}
                     name='first_name'
@@ -155,7 +136,6 @@ export function InputForm({
                         </FormItem>
                     )}
                 />
-
                 <FormField
                     control={form.control}
                     name='bday'
@@ -166,7 +146,6 @@ export function InputForm({
                                 <>
                                     <Input
                                         {...field}
-                                        ref={myRef}
                                         name='bday'
                                         id='bday'
                                         autoComplete='bday'
@@ -174,46 +153,18 @@ export function InputForm({
                                         required
                                         type='date'
                                     />
-                                    {/* <DatePicker /> */}
-
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant='outline'
-                                                className={cn(
-                                                    'w-[100%] justify-start text-left font-normal mt-4',
-                                                    !date &&
-                                                        'text-muted-foreground',
-                                                )}>
-                                                <CalendarIcon />
-                                                {date ? (
-                                                    format(date, 'PPP', {
-                                                        locale: ru,
-                                                    })
-                                                ) : (
-                                                    <span>Выберите дату</span>
-                                                )}
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className='w-auto p-0'>
-                                            <Calendar
-                                                mode='single'
-                                                selected={date}
-                                                onSelect={setDate}
-                                                initialFocus
-                                                fromDate={maxDate}
-                                                toDate={minDate}
-                                                locale={ru}
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
+                                    <DatePicker
+                                        setValue={(value) => {
+                                            form.setValue('bday', value);
+                                        }}
+                                        isResetForm={isResetForm}
+                                    />
                                 </>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-
                 <FormField
                     control={form.control}
                     name='email'
@@ -260,6 +211,7 @@ export function InputForm({
                             <FormLabel>Образование</FormLabel>
                             <Select
                                 required
+                                value={form.getValues('education')}
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}>
                                 <FormControl>
@@ -282,7 +234,9 @@ export function InputForm({
                         </FormItem>
                     )}
                 />
-                <Button type='submit'>Submit</Button>
+                <Button type='submit'>
+                    Далее <ChevronRight />
+                </Button>
             </form>
         </Form>
     );
