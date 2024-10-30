@@ -46,6 +46,7 @@ import { useContext, useState } from 'react';
 import { CurrentPageContext } from '../App.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function RateForm({}: {}) {
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -73,6 +74,12 @@ export function RateForm({}: {}) {
         setCurrentPage(++currentPage);
         if (currentPage === 3) {
             setResetForm(!isResetForm);
+            toast('Отзыв отправлен', {
+                action: {
+                    label: 'Скрыть',
+                    onClick: () => console.log('скрыт'),
+                },
+            });
             form.reset();
         }
     }
