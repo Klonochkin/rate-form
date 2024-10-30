@@ -1,7 +1,5 @@
 import { Button } from './components/ui/button';
-import { Form } from './modules/Form.tsx';
-import { SelectRate } from './modules/SelectRate.tsx';
-import { Review } from './modules/Review.tsx';
+import { RateForm } from './modules/rate-form.tsx';
 import { Toaster } from 'sonner';
 import { useState, createContext, useContext } from 'react';
 
@@ -23,16 +21,9 @@ function Control() {
 
     const { currentPage, setCurrentPage } = context;
 
-    let form: HTMLFormElement | null = null;
-    if (document.getElementById('form')) {
-        form = document.getElementById('form') as HTMLFormElement;
-    }
-
     return (
         <div>
-            <Form className={currentPage !== 0 ? 'sr-only' : ''} />
-            <SelectRate className={currentPage !== 1 ? 'sr-only' : ''} />
-            <Review className={currentPage !== 2 ? 'sr-only' : ''} />
+            <RateForm />
             <Button
                 className={
                     currentPage == 3
@@ -40,9 +31,6 @@ function Control() {
                         : 'sr-only'
                 }
                 onClick={() => {
-                    if (form) {
-                        form.reset();
-                    }
                     setCurrentPage(0);
                 }}>
                 Вернуться на главную

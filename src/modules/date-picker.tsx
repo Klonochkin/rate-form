@@ -11,7 +11,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
-export function DatePicker() {
+export function DatePicker({
+    setValue,
+}: {
+    setValue: (value: string) => void;
+}) {
     const [date, setDate] = useState<Date>();
     const today = new Date();
     const minDate = new Date(today);
@@ -39,7 +43,10 @@ export function DatePicker() {
                 <Calendar
                     mode='single'
                     selected={date}
-                    onSelect={setDate}
+                    onSelect={(date) => {
+                        setDate(date);
+                        setValue(date?.toISOString().slice(0, 10) ?? '');
+                    }}
                     initialFocus
                     fromDate={maxDate}
                     toDate={minDate}
