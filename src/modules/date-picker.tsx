@@ -9,12 +9,14 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function DatePicker({
     setValue,
+    isResetForm,
 }: {
     setValue: (value: string) => void;
+    isResetForm: boolean;
 }) {
     const [date, setDate] = useState<Date>();
     const today = new Date();
@@ -22,6 +24,11 @@ export function DatePicker({
     minDate.setFullYear(today.getFullYear() - 16);
     const maxDate = new Date(today);
     maxDate.setFullYear(today.getFullYear() - 100);
+
+    useEffect(() => {
+        setDate(undefined);
+    }, [isResetForm]);
+
     return (
         <Popover>
             <PopoverTrigger asChild>

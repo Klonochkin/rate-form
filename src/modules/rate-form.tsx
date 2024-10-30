@@ -42,7 +42,7 @@ const FormSchema = z.object({
 
 import { DatePicker } from './date-picker.tsx';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CurrentPageContext } from '../App.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -59,8 +59,11 @@ export function RateForm({}: {}) {
             bday: '',
             rate: '',
             review: '',
+            education: '',
         },
     });
+
+    const [isResetForm, setResetForm] = useState(true);
 
     const context = useContext(CurrentPageContext);
 
@@ -69,8 +72,8 @@ export function RateForm({}: {}) {
     function onSubmit() {
         setCurrentPage(++currentPage);
         if (currentPage === 3) {
+            setResetForm(!isResetForm);
             form.reset();
-            console.log(form.getValues());
         }
     }
 
@@ -160,6 +163,7 @@ export function RateForm({}: {}) {
                                             setValue={(value: string) => {
                                                 form.setValue('bday', value);
                                             }}
+                                            isResetForm={isResetForm}
                                         />
                                     </>
                                 </FormControl>
@@ -213,6 +217,7 @@ export function RateForm({}: {}) {
                                 <FormLabel>Образование</FormLabel>
                                 <Select
                                     required
+                                    value={form.getValues('education')}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}>
                                     <FormControl>
@@ -264,6 +269,7 @@ export function RateForm({}: {}) {
                                 <FormLabel>Оценка</FormLabel>
                                 <Select
                                     required={currentPage !== 1 ? false : true}
+                                    value={form.getValues('rate')}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}>
                                     <FormControl>
@@ -314,6 +320,7 @@ export function RateForm({}: {}) {
                                 <FormControl>
                                     <Textarea
                                         {...field}
+                                        value={form.getValues('review')}
                                         className='mt-4'
                                         required={
                                             currentPage !== 2 ? false : true
