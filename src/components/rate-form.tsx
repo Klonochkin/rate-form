@@ -45,7 +45,7 @@ export function RateForm() {
             email: '',
             tel: '',
             bday: '',
-            education: '1',
+            education: '',
             rate: '',
             review: '',
         },
@@ -59,8 +59,8 @@ export function RateForm() {
         setCurrentPage((currentPage) => currentPage - 1);
     };
 
-    function onSubmit() {
-        console.log(form.getValues());
+    function onSubmit(data: z.infer<(typeof Schemas)[0]>) {
+        console.log(data);
 
         goToNextPage();
 
@@ -81,7 +81,7 @@ export function RateForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-                {currentPage > 0 && (
+                {currentPage > 0 && currentPage < 3 && (
                     <Button
                         onClick={goToPrevPage}
                         variant='ghost'
