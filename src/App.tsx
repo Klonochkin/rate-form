@@ -1,26 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { RateForm } from '@/components/rate-form.tsx';
 import { Toaster } from 'sonner';
-import {
-    useState,
-    createContext,
-    useContext,
-    Dispatch,
-    SetStateAction,
-} from 'react';
-
-interface ContextType {
-    currentPage: number;
-    setCurrentPage: Dispatch<SetStateAction<number>>;
-}
-
-const initialContextValue: ContextType = {
-    currentPage: 0,
-    setCurrentPage: () => {},
-};
-
-export const CurrentPageContext =
-    createContext<ContextType>(initialContextValue);
+import { CurrentPageContext } from '@/components/current-page-context.tsx';
+import { useState, useContext } from 'react';
 
 function Control() {
     const { currentPage, setCurrentPage } = useContext(CurrentPageContext);
