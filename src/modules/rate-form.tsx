@@ -22,22 +22,42 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-const FormSchema = z.object({
-    first_name: z.string(),
-    father_name: z.string(),
-    last_name: z.string(),
+const PersonalInfoSchema = z.object({
+    first_name: z.string().min(1, {
+        message: 'Имя обязательно для заполнения',
+    }),
+    father_name: z.string().min(1, {
+        message: 'Отчество обязательно для заполнения',
+    }),
+    last_name: z.string().min(1, {
+        message: 'Фамилия обязательна для заполнения',
+    }),
     email: z
         .string({
-            required_error: 'Это поле обязательно для заполнения',
+            required_error: 'Email обязателeн для заполнения',
         })
         .email('Некорректный email'),
-    tel: z.string(),
-    education: z.string(),
-    bday: z.string(),
-    rate: z.string({
-        required_error: 'Это поле обязательно для заполнения',
+    tel: z.string().min(1, {
+        message: 'Телефон обязателен для заполнения',
     }),
-    review: z.string(),
+    education: z.string().min(1, {
+        message: 'Образование обязательно для заполнения',
+    }),
+    bday: z.string().min(1, {
+        message: 'День рождения обязателен для заполнения',
+    }),
+});
+
+const RateSchema = z.object({
+    rate: z.string().min(1, {
+        message: 'Оценка обязательна для заполнения',
+    }),
+});
+
+const FeedbackSchema = z.object({
+    review: z.string().min(1, {
+        message: 'Отзыв обязателен для заполнения',
+    }),
 });
 
 import { DatePicker } from './date-picker.tsx';
@@ -49,8 +69,14 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function RateForm({}: {}) {
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+    const [isResetForm, setResetForm] = useState(true);
+    const context = useContext(CurrentPageContext);
+    let { currentPage, setCurrentPage } = context;
+
+    const Schems = [PersonalInfoSchema, RateSchema, FeedbackSchema];
+
+    const form = useForm<z.infer<(typeof Schems)[2]>>({
+        resolver: zodResolver(Schems[currentPage]),
         defaultValues: {
             first_name: '',
             father_name: '',
@@ -58,19 +84,13 @@ export function RateForm({}: {}) {
             email: '',
             tel: '',
             bday: '',
+            education: '',
             rate: '',
             review: '',
-            education: '',
         },
     });
-
-    const [isResetForm, setResetForm] = useState(true);
-
-    const context = useContext(CurrentPageContext);
-
-    let { currentPage, setCurrentPage } = context;
-
     function onSubmit() {
+        console.log(form.getValues());
         setCurrentPage(++currentPage);
         if (currentPage === 3) {
             setResetForm(!isResetForm);
@@ -95,135 +115,212 @@ export function RateForm({}: {}) {
                     <FormField
                         control={form.control}
                         name='first_name'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Имя</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Имя
+                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        required
                                         type='text'
                                         placeholder='Иван'
                                         autoComplete='first-name'
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name='father_name'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Отчество</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Отчество
+                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        required
                                         type='text'
                                         placeholder='Иванович'
                                         autoComplete='additional-name'
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name='last_name'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Фамилия</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Фамилия
+                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        required
                                         type='text'
                                         placeholder='Иванов'
                                         autoComplete='family-name'
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name='bday'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>День рождения</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    День рождения
+                                </FormLabel>
                                 <FormControl>
                                     <>
-                                        <Input
-                                            {...field}
-                                            name='bday'
-                                            id='bday'
-                                            autoComplete='bday'
-                                            className='sr-only w-0'
-                                            required
-                                            type='date'
-                                        />
                                         <DatePicker
                                             setValue={(value: string) => {
                                                 form.setValue('bday', value);
+                                                field.onChange(value);
                                             }}
                                             isResetForm={isResetForm}
                                         />
                                     </>
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name='email'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Email</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Email
+                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        required
                                         type='email'
                                         placeholder='example@gmail.com'
                                         autoComplete='email'
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name='tel'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Телефон</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Телефон
+                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        required
                                         type='tel'
                                         placeholder='+7 (999) 999-99-99'
                                         autoComplete='tel'
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
                         name='education'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Образование</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Образование
+                                </FormLabel>
                                 <Select
-                                    required
                                     value={form.getValues('education')}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}>
@@ -244,7 +341,14 @@ export function RateForm({}: {}) {
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
@@ -271,14 +375,19 @@ export function RateForm({}: {}) {
                     <FormField
                         control={form.control}
                         name='rate'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Оценка</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Оценка
+                                </FormLabel>
                                 <Select
-                                    required={currentPage !== 1 ? false : true}
                                     value={form.getValues('rate')}
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}>
+                                    onValueChange={field.onChange}>
                                     <FormControl>
                                         <SelectTrigger className='w-[180px] mt-4'>
                                             <SelectValue placeholder='Выберите оценку' />
@@ -294,7 +403,14 @@ export function RateForm({}: {}) {
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
@@ -321,20 +437,31 @@ export function RateForm({}: {}) {
                     <FormField
                         control={form.control}
                         name='review'
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Напишите отзыв</FormLabel>
+                                <FormLabel
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    Напишите отзыв
+                                </FormLabel>
                                 <FormControl>
                                     <Textarea
                                         {...field}
                                         value={form.getValues('review')}
                                         className='mt-4'
-                                        required={
-                                            currentPage !== 2 ? false : true
-                                        }
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage
+                                    className={
+                                        fieldState.invalid
+                                            ? 'text-[#ff5252]'
+                                            : ''
+                                    }>
+                                    {fieldState.error?.message}{' '}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
