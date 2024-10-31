@@ -13,12 +13,15 @@ import { useEffect, useState } from 'react';
 
 export function DatePicker({
     setValue,
-    isResetForm,
+    value,
 }: {
     setValue: (value: string) => void;
-    isResetForm: boolean;
+    value: string;
+    isResetForm?: boolean;
 }) {
-    const [date, setDate] = useState<Date>();
+    const [date, setDate] = useState<Date | undefined>(
+        value?.length > 0 ? new Date(value) : undefined,
+    );
     const today = new Date();
     const minDate = new Date(today);
     minDate.setFullYear(today.getFullYear() - 16);
@@ -26,8 +29,8 @@ export function DatePicker({
     maxDate.setFullYear(today.getFullYear() - 100);
 
     useEffect(() => {
-        setDate(undefined);
-    }, [isResetForm]);
+        setDate(value?.length > 0 ? new Date(value) : undefined);
+    }, [value]);
 
     return (
         <Popover>

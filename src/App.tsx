@@ -1,11 +1,17 @@
-import { Button } from './components/ui/button';
-import { RateForm } from './modules/rate-form.tsx';
+import { Button } from '@/components/ui/button';
+import { RateForm } from '@/components/rate-form.tsx';
 import { Toaster } from 'sonner';
-import { useState, createContext, useContext } from 'react';
+import {
+    useState,
+    createContext,
+    useContext,
+    Dispatch,
+    SetStateAction,
+} from 'react';
 
 interface ContextType {
     currentPage: number;
-    setCurrentPage: (id: number) => void;
+    setCurrentPage: Dispatch<SetStateAction<number>>;
 }
 
 const initialContextValue: ContextType = {
@@ -17,24 +23,20 @@ export const CurrentPageContext =
     createContext<ContextType>(initialContextValue);
 
 function Control() {
-    const context = useContext(CurrentPageContext);
-
-    const { currentPage, setCurrentPage } = context;
+    const { currentPage, setCurrentPage } = useContext(CurrentPageContext);
 
     return (
         <div>
             <RateForm />
-            <Button
-                className={
-                    currentPage == 3
-                        ? 'flex flex-col self-start mt-4'
-                        : 'sr-only'
-                }
-                onClick={() => {
-                    setCurrentPage(0);
-                }}>
-                Вернуться на главную
-            </Button>
+            {currentPage == 3 && (
+                <Button
+                    className='flex flex-col self-start mt-4'
+                    onClick={() => {
+                        setCurrentPage(0);
+                    }}>
+                    Вернуться на главную
+                </Button>
+            )}
         </div>
     );
 }
@@ -44,15 +46,15 @@ export default function App() {
 
     return (
         <CurrentPageContext.Provider value={{ currentPage, setCurrentPage }}>
-            <main className='max-w-[750px] m-auto'>
+            <main className='max-w-[750px] m-auto antialiased'>
                 <h1 className='text-gray-100 font-bold text-4xl my-5'>
                     {currentPage !== 3
                         ? 'Оцените работу нашего сервиса'
                         : 'Спасибо за отзыв'}
                 </h1>
                 <Control />
-                <Toaster />
             </main>
+            <Toaster />
         </CurrentPageContext.Provider>
     );
 }
