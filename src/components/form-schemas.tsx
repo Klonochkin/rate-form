@@ -13,40 +13,41 @@ console.log(maxDate > minDate);
 const PersonalInfoSchema = z.object({
     first_name: z
         .string()
+        .trim()
         .min(1, {
             message: 'Имя обязательно для заполнения',
         })
-        .max(50, { message: 'Максимальный длинна - 50 символов' })
-        .trim(),
+        .max(50, { message: 'Максимальный длинна - 50 символов' }),
     father_name: z
         .string()
+        .trim()
         .max(50, { message: 'Максимальный длинна - 50 символов' })
-        .trim(),
+        .optional(),
     last_name: z
         .string()
+        .trim()
         .min(1, {
             message: 'Фамилия обязательна для заполнения',
         })
-        .max(50, { message: 'Максимальный длинна - 50 символов' })
-        .trim(),
+        .max(50, { message: 'Максимальный длинна - 50 символов' }),
     email: z
         .string()
+        .trim()
         .min(1, {
             message: 'Email обязателен для заполнения',
         })
         .email('Некорректный email')
         .max(320, { message: 'Максимальный длинна - 320 символов' })
-        .toLowerCase()
-        .trim(),
+        .toLowerCase(),
     tel: z
         .string()
+        .trim()
         .min(1, {
             message: 'Телефон обязателен для заполнения',
         })
         .regex(/^[+]79[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/, {
             message: 'Некорректный номер телефона',
-        })
-        .trim(),
+        }),
     education: z.string().min(1, {
         message: 'Образование обязательно для заполнения',
     }),
