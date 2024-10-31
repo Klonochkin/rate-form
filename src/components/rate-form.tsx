@@ -22,44 +22,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-const PersonalInfoSchema = z.object({
-    first_name: z.string().min(1, {
-        message: 'Имя обязательно для заполнения',
-    }),
-    father_name: z.string().min(1, {
-        message: 'Отчество обязательно для заполнения',
-    }),
-    last_name: z.string().min(1, {
-        message: 'Фамилия обязательна для заполнения',
-    }),
-    email: z
-        .string({
-            required_error: 'Email обязателeн для заполнения',
-        })
-        .email('Некорректный email'),
-    tel: z.string().min(1, {
-        message: 'Телефон обязателен для заполнения',
-    }),
-    education: z.string().min(1, {
-        message: 'Образование обязательно для заполнения',
-    }),
-    bday: z.string().min(1, {
-        message: 'День рождения обязателен для заполнения',
-    }),
-});
-
-const RateSchema = z.object({
-    rate: z.string().min(1, {
-        message: 'Оценка обязательна для заполнения',
-    }),
-});
-
-const FeedbackSchema = z.object({
-    review: z.string().min(1, {
-        message: 'Отзыв обязателен для заполнения',
-    }),
-});
-
 import { DatePicker } from './date-picker.tsx';
 
 import { useContext } from 'react';
@@ -67,13 +29,12 @@ import { CurrentPageContext } from '@/components/current-page-context.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
 
 import { toast } from 'sonner';
+import { Schemas } from '@/components/form-schemas.tsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function RateForm() {
     const context = useContext(CurrentPageContext);
     const { currentPage, setCurrentPage } = context;
-
-    const Schemas = [PersonalInfoSchema, RateSchema, FeedbackSchema];
 
     const form = useForm<z.infer<(typeof Schemas)[2]>>({
         resolver: zodResolver(Schemas[currentPage]),
