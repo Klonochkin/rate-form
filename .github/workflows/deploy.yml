@@ -27,9 +27,6 @@ jobs:
             - name: Lint
               run: pnpm lint
 
-            - name: Lint fix
-              run: pnpm lint:fix
-
     Build-and-Deploy:
         needs: Lint
         permissions:
