@@ -80,7 +80,10 @@ export function RateForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className='space-y-6'
+                noValidate>
                 {currentPage > 0 && currentPage < 3 && (
                     <Button
                         onClick={goToPrevPage}
