@@ -45,7 +45,7 @@ const PersonalInfoSchema = z.object({
         .min(1, {
             message: 'Телефон обязателен для заполнения',
         })
-        .regex(/^[+]79[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/, {
+        .regex(/^\+7\d{10}$/, {
             message: 'Некорректный номер телефона',
         }),
     education: z.string().min(1, {
