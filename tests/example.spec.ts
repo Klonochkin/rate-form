@@ -6,7 +6,7 @@ test('Отправка формы', async ({ page }) => {
     await page.getByPlaceholder('Иванович').fill('Иванович');
     await page.getByPlaceholder('Иванов', { exact: true }).fill('Иванов');
     await page.getByRole('button', { name: 'Выберите дату' }).click();
-    await page.getByRole('gridcell', { name: '1', exact: true }).click();
+    await page.getByLabel('суббота, 1 ноября 2008 г').click();
     await page.getByPlaceholder('example@gmail.com').click();
     await page.getByPlaceholder('example@gmail.com').fill('test@test.ru');
     await page.getByPlaceholder('+7 (999) 999-99-').fill('+79000000000');
@@ -34,7 +34,7 @@ test('Переключение страниц', async ({ page }) => {
     await page.getByPlaceholder('Иванович').fill('Иванович');
     await page.getByPlaceholder('Иванов', { exact: true }).fill('Иванов');
     await page.getByRole('button', { name: 'Выберите дату' }).click();
-    await page.getByRole('gridcell', { name: '1', exact: true }).click();
+    await page.getByLabel('суббота, 1 ноября 2008 г').click();
     await page.getByPlaceholder('example@gmail.com').click();
     await page.getByPlaceholder('example@gmail.com').fill('test@test.ru');
     await page.getByPlaceholder('+7 (999) 999-99-').fill('+79000000000');
@@ -101,7 +101,7 @@ test('Проверка валидации отчества', async ({ page }) =>
     await page.getByPlaceholder('Иван', { exact: true }).fill('Иван');
     await page.getByPlaceholder('Иванов', { exact: true }).fill('Иванов');
     await page.getByRole('button', { name: 'Выберите дату' }).click();
-    await page.getByRole('gridcell', { name: '1', exact: true }).click();
+    await page.getByLabel('суббота, 1 ноября 2008 г').click();
     await page.getByPlaceholder('example@gmail.com').click();
     await page.getByPlaceholder('example@gmail.com').fill('test@test.ru');
     await page.getByPlaceholder('+7 (999) 999-99-').fill('+79000000000');
