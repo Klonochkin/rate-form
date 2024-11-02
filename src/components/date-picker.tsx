@@ -29,7 +29,9 @@ export function DatePicker({
     maxDate.setFullYear(today.getFullYear() - 100);
 
     useEffect(() => {
-        setDate(value?.length > 0 ? new Date(value) : undefined);
+        const newDate = new Date(value);
+        newDate.setDate(newDate.getDate() + 1);
+        setDate(value?.length > 0 ? newDate : undefined);
     }, [value]);
 
     return (
@@ -57,9 +59,9 @@ export function DatePicker({
                         setDate(date);
                         setValue(date?.toISOString().slice(0, 10) ?? '');
                     }}
-                    initialFocus
-                    fromDate={maxDate}
-                    toDate={minDate}
+                    startMonth={maxDate}
+                    endMonth={minDate}
+                    hidden={[{ before: maxDate, after: minDate }]}
                     locale={ru}
                 />
             </PopoverContent>
